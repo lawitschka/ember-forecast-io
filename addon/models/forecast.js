@@ -1,3 +1,4 @@
+import classic from 'ember-classic-decorator';
 import DS from 'ember-data';
 
 const {
@@ -6,15 +7,32 @@ const {
   Model
 } = DS;
 
-export default Model.extend({
-  latitude: attr('number'),
-  longitude: attr('number'),
-  timezone: attr('string'),
-  offset: attr('number'),
+@classic
+export default class ForecastModel extends Model {
+  @attr('number')
+  latitude;
 
-  currently: belongsTo('forecast-io/data-point'),
-  hourly: belongsTo('forecast-io/data-block'),
-  daily: belongsTo('forecast-io/data-block'),
-  alerts: attr(),
-  flags: attr()
-});
+  @attr('number')
+  longitude;
+
+  @attr('string')
+  timezone;
+
+  @attr('number')
+  offset;
+
+  @belongsTo('forecast-io/data-point', { async: false })
+  currently;
+
+  @belongsTo('forecast-io/data-block', { async: false })
+  hourly;
+
+  @belongsTo('forecast-io/data-block', { async: false })
+  daily;
+
+  @attr()
+  alerts;
+
+  @attr()
+  flags;
+}

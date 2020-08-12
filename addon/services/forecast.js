@@ -1,7 +1,8 @@
+import classic from 'ember-classic-decorator';
+import { observes, on } from '@ember-decorators/object';
 import Service, { inject as service } from '@ember/service';
-import { on } from '@ember/object/evented';
 import { warn } from '@ember/debug';
-import { getWithDefault, observer } from '@ember/object';
+import { getWithDefault } from '@ember/object';
 import { getOwner } from '@ember/application';
 
 const DEFAULTS = {
@@ -10,56 +11,58 @@ const DEFAULTS = {
   host: 'http://localhost/forecast'
 };
 
-export default Service.extend({
+@classic
+export default class ForecastService extends Service {
   // Service
-  store: service(),
+  @service
+  store;
 
   // @public
   // The Forecast.io proxy host.
-  host: null,
+  host = null;
 
   // @public
   // Units being returned by Forecast.io.
-  units: null,
+  units = null;
 
   // @public
   // Language being used by Forecast.io in texts.
-  lang: null,
+  lang = null;
 
   // @public
   // Request weather forecast at specific location.
   forecast(latitude, longitude) {
     let id = `${latitude},${longitude}`;
-    return this.get('store').findRecord('forecast-io/forecast', id);
-  },
+    return this.store.findRecord('forecast-io/forecast', id);
+  }
 
   // @public
   // Request weather forecast at specific location at point in time.
   forecastAt(latitude, longitude, date) {
     let id = `${latitude},${longitude},${date.getTime() / 1000}`;
-    return this.get('store').findRecord('forecast-io/forecast', id);
-  },
+    return this.store.findRecord('forecast-io/forecast', id);
+  }
 
   // @private
-  _initDefaults: on('init', function() {
+  @on('init')
+  _initDefaults() {
     let ENV = getOwner(this).resolveRegistration('config:environment');
     let config = ENV['ember-forecast-io'] || {};
 
     if (config.host == null) {
       warn(`ember-forecast-io did not find a host setting, default to ${DEFAULTS.host}`, false, { id: 'ember-forecast-io.host' });
     }
-
     for (let property of ['units', 'lang', 'host']) {
       this.set(property, getWithDefault(config, property, DEFAULTS[property]));
     }
-  }),
+  }
 
   // @private
-  _clearCachedForecasts: observer('units', 'lang', function() {
-    let store = this.get('store');
-
+  // eslint-disable-next-line ember/no-observers
+  @observes('units', 'lang')
+  _clearCachedForecasts() {
     for (let modelName of ['forecast', 'data-block', 'data-point']) {
-      store.unloadAll(`forecast-io/${modelName}`);
+      this.store.unloadAll(`forecast-io/${modelName}`);
     }
-  })
-});
+  }
+}

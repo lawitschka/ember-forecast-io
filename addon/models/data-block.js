@@ -1,3 +1,4 @@
+import classic from 'ember-classic-decorator';
 import DS from 'ember-data';
 
 const {
@@ -6,8 +7,14 @@ const {
   Model
 } = DS;
 
-export default Model.extend({
-  summary: attr('string'),
-  icon: attr('string'),
-  dataPoints: hasMany('forecast-io/data-point')
-});
+@classic
+export default class DataBlockModel extends Model {
+  @attr('string')
+  summary;
+
+  @attr('string')
+  icon;
+
+  @hasMany('forecast-io/data-point', { async: false })
+  dataPoints;
+}

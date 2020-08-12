@@ -1,29 +1,32 @@
-import $ from 'jquery';
-import { alias } from '@ember/object/computed';
+import classic from 'ember-classic-decorator';
 import { inject as service } from '@ember/service';
+import { alias } from '@ember/object/computed';
 import DS from 'ember-data';
 
 const {
   RESTAdapter
 } = DS;
 
-export default RESTAdapter.extend({
-  forecast: service(),
+@classic
+export default class ForecastAdapter extends RESTAdapter {
+  @service
+  forecast;
 
-  host: alias('forecast.host'),
+  @alias('forecast.host')
+  host;
 
   pathForType() {
     return null;
-  },
+  }
 
   // Include language and unit query parameters in URL.
   urlForFindRecord() {
-    let url = this._super(...arguments);
+    let url = super.urlForFindRecord(...arguments);
     let query = {
-      units: this.get('forecast.units'),
-      lang: this.get('forecast.lang')
+      units: this.forecast.units,
+      lang: this.forecast.lang
     };
-
-    return `${url}?${$.param(query)}`;
+    const URLparams = new URLSearchParams(Object.entries(query))
+    return `${url}?${URLparams}`;
   }
-});
+}

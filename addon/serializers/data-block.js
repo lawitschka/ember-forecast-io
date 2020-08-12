@@ -1,3 +1,4 @@
+import classic from 'ember-classic-decorator';
 import DS from 'ember-data';
 
 const {
@@ -5,20 +6,21 @@ const {
   RESTSerializer
 } = DS;
 
-export default RESTSerializer.extend(EmbeddedRecordsMixin, {
-  attrs: {
+@classic
+export default class DataBlockSerializer extends RESTSerializer.extend(EmbeddedRecordsMixin) {
+  attrs = {
     dataPoints: {
       key: 'data',
       serialize: false,
       deserialize: 'records'
     }
-  },
+  }
 
   normalize(modelClass, resourceHash, prop) {
     resourceHash.id = this._generateUUID();
 
-    return this._super(modelClass, resourceHash, prop);
-  },
+    return super.normalize(modelClass, resourceHash, prop);
+  }
 
   _generateUUID() {
     let r = function(s) {
@@ -27,4 +29,4 @@ export default RESTSerializer.extend(EmbeddedRecordsMixin, {
     };
     return r() + r(1) + r(1) + r();
   }
-});
+}

@@ -1,3 +1,4 @@
+import classic from 'ember-classic-decorator';
 import DS from 'ember-data';
 
 const {
@@ -5,8 +6,9 @@ const {
   RESTSerializer
 } = DS;
 
-export default RESTSerializer.extend(EmbeddedRecordsMixin, {
-  attrs: {
+@classic
+export default class ForecastSerializer extends RESTSerializer.extend(EmbeddedRecordsMixin) {
+  attrs = {
     currently: {
       serialize: false,
       deserialize: 'records'
@@ -19,7 +21,7 @@ export default RESTSerializer.extend(EmbeddedRecordsMixin, {
       serialize: false,
       deserialize: 'records'
     }
-  },
+  }
 
   normalizeResponse(store, modelClass, payload, recordId, requestType) {
     let typeKey = modelClass.modelName;
@@ -27,6 +29,6 @@ export default RESTSerializer.extend(EmbeddedRecordsMixin, {
     newPayload[typeKey] = payload;
     newPayload[typeKey].id = recordId;
 
-    return this._super(store, modelClass, newPayload, recordId, requestType);
+    return super.normalizeResponse(store, modelClass, newPayload, recordId, requestType);
   }
-});
+};

@@ -1,3 +1,4 @@
+import classic from 'ember-classic-decorator';
 import DS from 'ember-data';
 
 const {
@@ -5,37 +6,101 @@ const {
   Model
 } = DS;
 
-export default Model.extend({
-  time: attr('unix-timestamp'),
-  summary: attr('string'),
-  icon: attr('string'),
-  sunriseTime: attr('unix-timestamp'),
-  sunsetTime: attr('unix-timestamp'),
-  moonPhase: attr('number'),
-  nearestStormDistance: attr('number'),
-  nearestStormBearing: attr('number'),
-  precipIntensity: attr('number'),
-  precipIntensityMax: attr('number'),
-  precipIntensityMaxTime: attr('unix-timestamp'),
-  precipProbability: attr('number'),
-  precipType: attr('string'),
-  precipAccumulation: attr('number'),
-  temperature: attr('number'),
-  temperatureMin: attr('number'),
-  temperatureMinTime: attr('unix-timestamp'),
-  temperatureMax: attr('number'),
-  temperatureMaxTime: attr('unix-timestamp'),
-  apparentTemperature: attr('number'),
-  apparentTemperatureMin: attr('number'),
-  apparentTemperatureMinTime: attr('unix-timestamp'),
-  apparentTemperatureMax: attr('number'),
-  apparentTemperatureMaxTime: attr('unix-timestamp'),
-  dewPoint: attr('number'),
-  windSpeed: attr('number'),
-  windBearing: attr('number'),
-  cloudCover: attr('number'),
-  humidity: attr('number'),
-  pressure: attr('number'),
-  visibility: attr('number'),
-  ozone: attr('number')
-});
+@classic
+export default class DataPointModel extends Model {
+  @attr('unix-timestamp')
+  time;
+
+  @attr('string')
+  summary;
+
+  @attr('string')
+  icon;
+
+  @attr('unix-timestamp')
+  sunriseTime;
+
+  @attr('unix-timestamp')
+  sunsetTime;
+
+  @attr('number')
+  moonPhase;
+
+  @attr('number')
+  nearestStormDistance;
+
+  @attr('number')
+  nearestStormBearing;
+
+  @attr('number')
+  precipIntensity;
+
+  @attr('number')
+  precipIntensityMax;
+
+  @attr('unix-timestamp')
+  precipIntensityMaxTime;
+
+  @attr('number')
+  precipProbability;
+
+  @attr('string')
+  precipType;
+
+  @attr('number')
+  precipAccumulation;
+
+  @attr('number')
+  temperature;
+
+  @attr('number')
+  temperatureMin;
+
+  @attr('unix-timestamp')
+  temperatureMinTime;
+
+  @attr('number')
+  temperatureMax;
+
+  @attr('unix-timestamp')
+  temperatureMaxTime;
+
+  @attr('number')
+  apparentTemperature;
+
+  @attr('number')
+  apparentTemperatureMin;
+
+  @attr('unix-timestamp')
+  apparentTemperatureMinTime;
+
+  @attr('number')
+  apparentTemperatureMax;
+
+  @attr('unix-timestamp')
+  apparentTemperatureMaxTime;
+
+  @attr('number')
+  dewPoint;
+
+  @attr('number')
+  windSpeed;
+
+  @attr('number')
+  windBearing;
+
+  @attr('number')
+  cloudCover;
+
+  @attr('number')
+  humidity;
+
+  @attr('number')
+  pressure;
+
+  @attr('number')
+  visibility;
+
+  @attr('number')
+  ozone;
+}
