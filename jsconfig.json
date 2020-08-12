@@ -1,14 +1,1 @@
-{
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "target":"es2020"
-  },
-  "exclude": [
-    ".git",
-    "bower_components",
-    "dist",
-    "node_modules",
-    "tmp",
-    "vendor"
-  ]
-}
+{"compilerOptions":{"target":"es6","experimentalDecorators":true},"exclude":["node_modules","bower_components","tmp","vendor",".git","dist"]}
