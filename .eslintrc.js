@@ -16,7 +16,7 @@ module.exports = {
     'browser': true
   },
   rules: {
-    'ember/use-ember-data-rfc-395-imports': false,
+    'ember/use-ember-data-rfc-395-imports': 0,
     'strict': 0,
     'no-unused-vars': 'error',
     'no-dupe-keys': 'error'
