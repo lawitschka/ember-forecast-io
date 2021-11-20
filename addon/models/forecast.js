@@ -1,11 +1,5 @@
 import classic from 'ember-classic-decorator';
-import DS from 'ember-data';
-
-const {
-  attr,
-  belongsTo,
-  Model
-} = DS;
+import Model, { attr, belongsTo } from '@ember-data/model';
 
 @classic
 export default class ForecastModel extends Model {

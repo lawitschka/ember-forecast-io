@@ -1,11 +1,5 @@
 import classic from 'ember-classic-decorator';
-import DS from 'ember-data';
-
-const {
-  attr,
-  hasMany,
-  Model
-} = DS;
+import Model, { attr, hasMany } from '@ember-data/model';
 
 @classic
 export default class DataBlockModel extends Model {

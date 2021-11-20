@@ -1,14 +1,14 @@
 import classic from 'ember-classic-decorator';
-import { observes, on } from '@ember-decorators/object';
 import Service, { inject as service } from '@ember/service';
 import { warn } from '@ember/debug';
 import { getWithDefault } from '@ember/object';
+import { addObserver, removeObserver } from '@ember/object/observers';
 import { getOwner } from '@ember/application';
 
 const DEFAULTS = {
   units: 'us',
   lang: 'en',
-  host: 'http://localhost/forecast'
+  host: 'http://localhost/forecast',
 };
 
 @classic
@@ -43,14 +43,31 @@ export default class ForecastService extends Service {
     return this.store.findRecord('forecast-io/forecast', id);
   }
 
-  // @private
-  @on('init')
+  init(...args) {
+    super.init(...args);
+
+    this._initDefaults();
+
+    this._boundClearCachedForecasts = this._clearCachedForecasts.bind(this);
+    addObserver(this, 'units', this._boundClearCachedForecasts);
+    addObserver(this, 'lang', this._boundClearCachedForecasts);
+  }
+
+  willDestroy() {
+    removeObserver(this, 'units', this._boundClearCachedForecasts);
+    removeObserver(this, 'lang', this._boundClearCachedForecasts);
+  }
+
   _initDefaults() {
     let ENV = getOwner(this).resolveRegistration('config:environment');
     let config = ENV['ember-forecast-io'] || {};
 
     if (config.host == null) {
-      warn(`ember-forecast-io did not find a host setting, default to ${DEFAULTS.host}`, false, { id: 'ember-forecast-io.host' });
+      warn(
+        `ember-forecast-io did not find a host setting, default to ${DEFAULTS.host}`,
+        false,
+        { id: 'ember-forecast-io.host' }
+      );
     }
     for (let property of ['units', 'lang', 'host']) {
       this.set(property, getWithDefault(config, property, DEFAULTS[property]));
@@ -59,7 +76,6 @@ export default class ForecastService extends Service {
 
   // @private
   // eslint-disable-next-line ember/no-observers
-  @observes('units', 'lang')
   _clearCachedForecasts() {
     for (let modelName of ['forecast', 'data-block', 'data-point']) {
       this.store.unloadAll(`forecast-io/${modelName}`);

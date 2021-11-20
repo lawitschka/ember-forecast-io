@@ -1,9 +1,5 @@
 import classic from 'ember-classic-decorator';
-import DS from 'ember-data';
-
-const {
-  RESTSerializer
-} = DS;
+import RESTSerializer from '@ember-data/serializer/rest';
 
 @classic
 export default class DataPointSerializer extends RESTSerializer {
