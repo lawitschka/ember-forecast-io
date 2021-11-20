@@ -1,9 +1,5 @@
 import classic from 'ember-classic-decorator';
-import DS from 'ember-data';
-
-const {
-  Transform
-} = DS;
+import Transform from '@ember-data/serializer/transform';
 
 @classic
 export default class UnixTimestampTransform extends Transform {
@@ -12,6 +8,6 @@ export default class UnixTimestampTransform extends Transform {
   }
 
   serialize(deserialized) {
-    return deserialized ? (deserialized.getTime() / 1000) : null;
+    return deserialized ? deserialized.getTime() / 1000 : null;
   }
 }
